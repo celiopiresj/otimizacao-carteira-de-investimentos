@@ -36,3 +36,51 @@ Os pacotes necessários para este projeto serão instalados automaticamente atra
 ```bash
 python investment_optimization.py
 ```
+
+## Funções Principais
+
+### 1. `calcular_var(dados, nivel=0.05)`
+Calcula o Value at Risk (VaR) a um determinado nível de confiança.
+
+- **Parâmetros:**
+  - `dados`: Array de dados financeiros.
+  - `nivel`: Nível de confiança para o cálculo (default é 0.05 para 95%).
+
+- **Retorno:** O VaR calculado.
+
+### 2. `calcular_cvar(dados, nivel=0.05)`
+Calcula o Conditional Value at Risk (CVaR) a um determinado nível de confiança.
+
+- **Parâmetros:**
+  - `dados`: Array de dados financeiros.
+  - `nivel`: Nível de confiança para o cálculo (default é 0.05 para 95%).
+
+- **Retorno:** O CVaR calculado.
+
+### 3. `otimizar_carteira(retornos, riscos, capacidade)`
+Otimizador de carteira que utiliza programação linear para maximizar os retornos sob uma restrição de risco.
+
+- **Parâmetros:**
+  - `retornos`: Retornos esperados dos ativos.
+  - `riscos`: Volatilidade dos ativos.
+  - `capacidade`: Limite de risco aceito.
+
+- **Retorno:** Pesos ótimos dos ativos na carteira.
+
+## Visualizações e Gráficos
+
+### Fronteira Eficiente
+Um gráfico que mostra a relação entre risco e retorno esperado dos ativos. Os pontos são coloridos de acordo com a razão retorno/risco.
+![Gráfico da Fronteira Eficiente](imagens/fronteira_eficiente.png)
+
+### Distribuição da Carteira
+Um gráfico de barras que representa a alocação percentual de cada ativo na carteira otimizada.
+![Gráfico da Alocação dos Pesos](imagens/alocacao_dos_pesos.png)
+
+### Evolução dos Retornos
+Um gráfico que mostra os retornos acumulados ao longo do tempo para cada ativo.
+![Gráfico da Evolução dos retornos](imagens/evolucao_retornos.png)
+
+### Última Execução
+Uma captura da última execução do script.
+![Ultima execução](imagens/execução.png)
