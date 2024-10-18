@@ -1,11 +1,11 @@
-import install_packages
+# import install_packages
 import yfinance as yf
 import pandas as pd
 from datetime import datetime, timedelta
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from scipy.optimize import linprog
+from scipy.optimize import linprog, minimize
 
 # Define os tickers dos ativos financeiros a serem analisados
 tickers = ["PETR3.SA", "^BVSP", "^GSPC", "VALE3.SA", "ITUB4.SA", "B3SA3.SA"]
@@ -60,16 +60,31 @@ print(cvar)
 # Função para otimizar a carteira
 
 
-def otimizar_carteira(retornos, riscos, capacidade):
-    c = [-r for r in retornos]
-    A = [riscos]
-    b = [capacidade]
-    resultado = linprog(c, A_ub=A, b_ub=b, bounds=(0, 1))
+def otimizar_carteira(retornos, risco, risco_maximo):
+    n = len(retornos)
+
+    # Função objetivo: maximizar o retorno
+    def objetivo(pesos):
+        return -np.dot(pesos, retornos)
+
+    # Restrição de risco
+    def restricao(pesos):
+        return risco_maximo - np.sqrt(np.dot(pesos.T, np.dot(np.diag(risco**2), pesos)))
+
+    # Restrições e limites dos pesos dos ativos
+    restricoes = {'type': 'ineq', 'fun': restricao}
+    limites = [(0, 1) for _ in range(n)]
+    pesos_iniciais = np.ones(n) / n  # Pesos iniciais iguais
+
+    # Resolver problema de otimização
+    resultado = minimize(objetivo, pesos_iniciais, method='SLSQP',
+                         bounds=limites, constraints=restricoes)
+
     return resultado.x
 
 
 # Executa a otimização da carteira com limite de risco de 0.2
-pesos = otimizar_carteira(retornos.mean(), volatilidade, capacidade=0.2)
+pesos = otimizar_carteira(retornos.mean(), volatilidade, 0.2)
 pesos_percent = [peso * 100 for peso in pesos]
 
 # Visualiza a Fronteira Eficiente
