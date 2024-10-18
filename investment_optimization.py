@@ -15,7 +15,7 @@ data_inicial = data_final - timedelta(days=3*365)
 dados_mercado = yf.download(tickers, start=data_inicial, end=data_final)
 dados_mercado = dados_mercado["Adj Close"]
 dados_mercado = dados_mercado.dropna()
-dados_mercado.columns = ["B3", "ITAÚ",
+dados_mercado.columns = ["B3", "ITAU",
                          "PETROBRAS", "VALE", "IBOVESPA", "S&P500"]
 
 # Calcular retornos logarítmicos
@@ -41,7 +41,7 @@ def calcular_cvar(dados, nivel=0.05):
 var = calcular_var(retornos)
 cvar = calcular_cvar(retornos)
 
-print("Retornos Médios:")
+print("Retornos Medios:")
 print(retornos.mean())
 print("\nVolatilidade (Risco):")
 print(volatilidade)
@@ -73,6 +73,7 @@ plt.xlabel('Risco (Volatilidade) (%)')
 plt.ylabel('Retorno Esperado (%)')
 plt.title('Fronteira Eficiente')
 plt.colorbar(label='Retorno / Risco')
+plt.savefig('fronteira_eficiente.png')
 plt.show()
 
 # Alocação dos Pesos
@@ -86,6 +87,7 @@ for bar in bars:
     yval = bar.get_height()
     plt.text(bar.get_x() + bar.get_width()/2 - 0.1, yval + 0.5, f'{yval:.2f}%')
 
+plt.savefig('alocacao_dos_pesos.png')
 plt.show()
 
 # Evolução dos Retornos
@@ -96,4 +98,5 @@ plt.xlabel('Tempo')
 plt.ylabel('Retornos Acumulados')
 plt.title('Evolução dos Retornos')
 plt.legend(dados_mercado.columns)
+plt.savefig('evolucao_retornos.png')
 plt.show()
